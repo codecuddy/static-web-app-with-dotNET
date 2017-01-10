@@ -16,10 +16,13 @@ namespace WebApplication1
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDirectoryBrowser();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
 
@@ -28,15 +31,33 @@ namespace WebApplication1
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseFileServer();
+            //app.UseDirectoryBrowser();
+            //app.UseFileServer();
             //app.UseStaticFiles();
 
-            app.Run(async (context) =>
+            /*
+            if (env.IsDevelopment())
             {
-                await context.Response.WriteAsync("Hello Friends!");
-            });
-
+                app.Run(async (context) =>
+                {
+                    await context.Response.WriteAsync("This is Development!");
+                });
+            } 
+            else 
+            {
+                app.Run(async (context) =>
+                {
+                    await context.Response.WriteAsync("And this is Production!");
+                });
+            }  
+            */
             
+            {
+                app.Run(async (context) =>
+                {
+                    await context.Response.WriteAsync($"This is {env.EnvironmentName}"); //way better than the if else statement above
+                });
+            }
         }
     }
 }
